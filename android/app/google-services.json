@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "530523132253",
+    "project_id": "task-map0tracking",
+    "storage_bucket": "task-map0tracking.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530523132253:android:d59d558da2ed9821be58b4",
+        "android_client_info": {
+          "package_name": "com.example.task_googlemap0tracking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPOPW9AO9YAm8NIFLjefoO9Wp2VYCB9oA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
