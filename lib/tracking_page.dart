@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -9,18 +11,24 @@ class TrackingPage extends StatefulWidget {
 }
 
 class _TrackingPageState extends State<TrackingPage> {
-  static const LatLng staringLocation = LatLng(37.33500926, -122.03272188);
-  static const LatLng destinationLocation = LatLng(37.33429383, -122.06600055);
+  static const LatLng staringLocation = LatLng(23.8191, 90.4526);
+  static const LatLng destinationLocation = LatLng(23.8041, 90.4152);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Traking position',
-        style: TextStyle(color: Colors.black, fontSize: 16),),
-        
+        title: const Text(
+          'Traking position',
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
       ),
-      body: const Center(
-        child: Text('Task: GoogleMap tracking......'),
+      body: GoogleMap(
+        initialCameraPosition:
+           CameraPosition(target: staringLocation, zoom: 12),
+        markers: {
+          Marker(markerId: MarkerId("start"),position: staringLocation),
+          Marker(markerId: MarkerId("end"),position: destinationLocation),
+        },
       ),
     );
   }
