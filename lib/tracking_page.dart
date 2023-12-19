@@ -1,5 +1,7 @@
 // ignore_for_file: unused_field, unused_local_variable, avoid_function_literals_in_foreach_calls
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,6 +16,7 @@ class TrackingPage extends StatefulWidget {
 }
 
 class _TrackingPageState extends State<TrackingPage> {
+  final Completer<GoogleMapController> _completer = Completer();
   static const LatLng staringLocation = LatLng(23.8191, 90.4526);
   static const LatLng destinationLocation = LatLng(23.8041, 90.4152);
 
@@ -24,6 +27,10 @@ class _TrackingPageState extends State<TrackingPage> {
     Location location = Location();
     location.getLocation().then((location) {
       currentLocation = location;
+    });
+
+    location.onLocationChanged.listen((newLocation) {
+      currentLocation = newLocation;
     });
   }
 
@@ -62,28 +69,37 @@ class _TrackingPageState extends State<TrackingPage> {
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
-      body: currentLocation == null ? const Center(child: Text('Loading.....')):
-      GoogleMap(
-        initialCameraPosition:
-            CameraPosition(target: staringLocation, zoom: 12.5),
-        polylines: {
-          Polyline(
-              polylineId: PolylineId('Routes'),
-              points: polylineCoordinates,
-              color: primaryColor,
-              width: 6),
-        },
-        markers: {
-          Marker(
-            markerId: MarkerId('currentLocation'),
-            position: LatLng(
-              currentLocation!.latitude!,currentLocation!.longitude!,
+      body: currentLocation == null
+          ? const Center(child: Text('Loading.....'))
+          : GoogleMap(
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      currentLocation!.latitude!, currentLocation!.longitude!),
+                  zoom: 12.5),
+              polylines: {
+                Polyline(
+                    polylineId: PolylineId('Routes'),
+                    points: polylineCoordinates,
+                    color: primaryColor,
+                    width: 6),
+              },
+              markers: {
+                Marker(
+                  markerId: const MarkerId('currentLocation'),
+                  position: LatLng(
+                    currentLocation!.latitude!,
+                    currentLocation!.longitude!,
+                  ),
+                ),
+                const Marker(
+                    markerId: MarkerId("start"), position: staringLocation),
+                const Marker(
+                    markerId: MarkerId("end"), position: destinationLocation),
+              },
+              onMapCreated: (GoogleMapController) {
+                _completer.complete(GoogleMapController);
+              },
             ),
-          ),
-          Marker(markerId: MarkerId("start"), position: staringLocation),
-          Marker(markerId: MarkerId("end"), position: destinationLocation),
-        },
-      ),
     );
   }
 }
